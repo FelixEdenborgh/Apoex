@@ -24,10 +24,11 @@ def User_choice(x):
     beer = response.json()
     # printing out best food to your choice
     print("The status code is: ", response.status_code)
+    print("halloj")
     if (response.status_code == 200):
         for s in range(len(beer)):
             if beer[s]["name"] == x:
-                print("\nBeer of yourchoice are: {}\nDescription of the beer {}\n{} \n{} \nSome lovely food to eat with {} are: {} ".format(beer[s]["name"], beer[s]["name"], beer[s]["description"],
+                print("\nBeer of your choice are: {} {}%\nDescription of the beer {}\n{} \n{} \nSome lovely food to eat with {} are: {} ".format(beer[s]["name"],beer[s]["abv"], beer[s]["name"], beer[s]["description"],
                                                                                                            beer[s][
                                                                                                                "tagline"],
                                                                                                            beer[s]["name"],
@@ -35,43 +36,65 @@ def User_choice(x):
                                                                                                                "food_pairing"]))
 # Find all of an element the user is looking for
 def Find_All_Off_Type(x_choice):
-    Base_url = "https://api.punkapi.com/v2/beers?"
-    PARAMS = {
-        '?beer_name=': x_choice
-              }
+    user_choise = str(x_choice)
+    Base_url = "https://api.punkapi.com/v2/beers?beer_name={}".format(user_choise)
+
+    print(Base_url)
     # Searching for alternatives within API
-    r = requests.get(Base_url, params=PARAMS)
+    # problemet är att den inte lägger till min parameter efter url:en
+    r = requests.get(Base_url)
     data = r.json()
-    beers = []
     print("The status code is: ", r.status_code)
+    # hitta något sätt att lära ut datan från din dict samt att den också ska gå efter user choice. Dvs väljer du "ada" så ska den skriva ut allt med ada inuti.
+    state = 0
+    Beer_Data = json.dumps(data) #json.dumps take a dictionary as input and returns a string as output.
+    Beer_Data_Test = json.loads(Beer_Data) # json.loads take a string as input and returns a dictionary as output.
     if (r.status_code == 200):
-        for s in range(len(data)):
-            beers.append(data[s]['name'])
+        for user_choise in Beer_Data_Test[:10]:
+            if (user_choise in Beer_Data_Test):
+                print(user_choise['name'], user_choise['abv'])
+                state = state + 1
+                if(state == 10):
+                    break
 
+            else:
+                print("Nothing here")
 
-        for output in range(len(beers[:1])):
-            print(beers[:10], "\n")
+        else:
+            print("Nothing here")
 
     else:
         print("Something went wrong!")
 
 
 def Secound_Ten(x_choice):
-    Base_url = "https://api.punkapi.com/v2/beers?"
-    PARAMS = {
-        '?beer_name=': x_choice
-    }
-    # Searching for alternatives within API
-    r = requests.get(Base_url, params=PARAMS)
-    data = r.json()
-    beers = []
-    print("The status code is: ", r.status_code)
-    if (r.status_code == 200):
-        for s in range(len(data)):
-            beers.append(data[s]['name'])
+    user_choise = str(x_choice)
+    Base_url = "https://api.punkapi.com/v2/beers?beer_name={}".format(user_choise)
 
-        for output in range(len(beers[:1])):
-            print(beers[10:20], "\n")
+    print(Base_url)
+    # Searching for alternatives within API
+    # problemet är att den inte lägger till min parameter efter url:en
+    r = requests.get(Base_url)
+    data = r.json()
+    print("The status code is: ", r.status_code)
+    # hitta något sätt att lära ut datan från din dict samt att den också ska gå efter user choice. Dvs väljer du "ada" så ska den skriva ut allt med ada inuti.
+    state = 0
+    Beer_Data = json.dumps(data)  # json.dumps take a dictionary as input and returns a string as output.
+    Beer_Data_Test = json.loads(Beer_Data)  # json.loads take a string as input and returns a dictionary as output.
+    if (r.status_code == 200):
+        for user_choise in Beer_Data_Test[10:20]:
+            if (user_choise in Beer_Data_Test):
+                print(user_choise['name'], user_choise['abv'])
+                state = state + 1
+                if (state == 10):
+                    break
+
+
+            else:
+                print("Nothing here")
+
+        else:
+            print("Nothing here")
 
     else:
         print("Something went wrong!")
