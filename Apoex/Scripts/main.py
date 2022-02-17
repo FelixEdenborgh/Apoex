@@ -1,8 +1,6 @@
 import requests
 import json
 
-session = requests.session()
-
 
 def jprint(obj):
     # create a formatted string of the Python Json Object
@@ -25,38 +23,55 @@ def User_choice(x):
     response = requests.get("https://api.punkapi.com/v2/beers")
     beer = response.json()
     # printing out best food to your choice
-    for s in range(len(beer)):
-        if beer[s]["name"] == x:
-            print("\nBeer of yourchoice are: {}\nDescription of the beer {}\n{} \n{} \nSome lovely food to eat with {} are: {} ".format(beer[s]["name"], beer[s]["name"], beer[s]["description"],
-                                                                                                       beer[s][
-                                                                                                           "tagline"],
-                                                                                                       beer[s]["name"],
-                                                                                                       beer[s][
-                                                                                                           "food_pairing"]))
+    print("The status code is: ", response.status_code)
+    if (response.status_code == 200):
+        for s in range(len(beer)):
+            if beer[s]["name"] == x:
+                print("\nBeer of yourchoice are: {}\nDescription of the beer {}\n{} \n{} \nSome lovely food to eat with {} are: {} ".format(beer[s]["name"], beer[s]["name"], beer[s]["description"],
+                                                                                                           beer[s][
+                                                                                                               "tagline"],
+                                                                                                           beer[s]["name"],
+                                                                                                           beer[s][
+                                                                                                               "food_pairing"]))
 # Find all of an element the user is looking for
 def Find_All_Off_Type(x_choice):
-    PARAMS = {'?beer_name=': x_choice}
+    Base_url = "https://api.punkapi.com/v2/beers?"
+    PARAMS = {
+        '?beer_name=': x_choice
+              }
     # Searching for alternatives within API
-    r = requests.get(url="https://api.punkapi.com/v2/beers", params=PARAMS)
+    r = requests.get(Base_url, params=PARAMS)
     data = r.json()
-    if(r.status_code == 200):
-        for s in range(len(data[:10])):
-            print("\n {} \n Alcohol content {} ".format(data[s]["name"], data[s]["abv"]))
+    beers = []
+    print("The status code is: ", r.status_code)
+    if (r.status_code == 200):
+        for s in range(len(data)):
+            beers.append(data[s]['name'])
+
+
+        for output in range(len(beers[:1])):
+            print(beers[:10], "\n")
 
     else:
         print("Something went wrong!")
 
 
-
-
 def Secound_Ten(x_choice):
-    PARAMS = {'?beer_name=': x_choice}
+    Base_url = "https://api.punkapi.com/v2/beers?"
+    PARAMS = {
+        '?beer_name=': x_choice
+    }
     # Searching for alternatives within API
-    r = requests.get(url="https://api.punkapi.com/v2/beers", params=PARAMS)
+    r = requests.get(Base_url, params=PARAMS)
     data = r.json()
+    beers = []
+    print("The status code is: ", r.status_code)
     if (r.status_code == 200):
-        for s in range(len(data[10:20])):
-            print("\n {} \n Alcohol content {} ".format(data[s]["name"], data[s]["abv"]))
+        for s in range(len(data)):
+            beers.append(data[s]['name'])
+
+        for output in range(len(beers[:1])):
+            print(beers[10:20], "\n")
 
     else:
         print("Something went wrong!")
@@ -79,15 +94,20 @@ while(play == True):
         Find_All_Off_Type(enter_a_beer_type)
         print("\n")
         print("1: Next Page")
-        print("2: Check a beer")
-        print("3: Exit")
+        print("2: Search again for a beer type: ")
+        print("3: Check a beer")
+        print("4: Exit")
 
         choice = input()
         if(choice == "1"):
             # if next page
             Secound_Ten(enter_a_beer_type)
             continue
-        elif(choice == "2"):
+        elif (choice == "2"):
+            enter_a_beer_type = input("enter a type of beer: ")
+            Find_All_Off_Type(enter_a_beer_type)
+            continue
+        elif(choice == "3"):
             name()
             to_find = input("Enter the name of the beer: ")
             User_choice(to_find)
@@ -107,6 +127,4 @@ while(play == True):
         print("Shop will now close have a nice day!")
         play = False
         break
-
-
 
