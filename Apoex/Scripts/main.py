@@ -24,7 +24,6 @@ def User_choice(x):
     beer = response.json()
     # printing out best food to your choice
     print("The status code is: ", response.status_code)
-    print("halloj")
     if (response.status_code == 200):
         for s in range(len(beer)):
             if beer[s]["name"] == x:
@@ -32,8 +31,40 @@ def User_choice(x):
                                                                                                            beer[s][
                                                                                                                "tagline"],
                                                                                                            beer[s]["name"],
-                                                                                                           beer[s][
+                                                                                                   beer[s][
                                                                                                                "food_pairing"]))
+
+
+
+
+
+def choice_A_Beer(x_choice, userC):
+    user_choise = str(x_choice)
+    Base_url = "https://api.punkapi.com/v2/beers?beer_name={}".format(user_choise)
+    print(Base_url)
+    r = requests.get(Base_url)
+    data = r.json()
+    # printing out best food to your choice
+    print("The status code is: ", r.status_code)
+    Beer_Data = json.dumps(data)  # json.dumps take a dictionary as input and returns a string as output.
+    Beer_Data_Test = json.loads(Beer_Data)  # json.loads take a string as input and returns a dictionary as output.
+    if (r.status_code == 200):
+        print(userC)
+        for user_choise in range(len(Beer_Data_Test)):
+            if Beer_Data_Test[user_choise]["name"] == userC:
+                print(
+                    "\nBeer of your choice are: {} {}%\nDescription of the beer {}\n{} \n{} \nSome lovely food to eat with {} are: {} ".format(
+                        Beer_Data_Test[user_choise]["name"],
+                        Beer_Data_Test[user_choise]["abv"],
+                        Beer_Data_Test[user_choise]["name"],
+                        Beer_Data_Test[user_choise]["description"],
+                        Beer_Data_Test[user_choise]["tagline"],
+                        Beer_Data_Test[user_choise]["name"],
+                        Beer_Data_Test[user_choise]["food_pairing"]))
+
+
+
+
 # Find all of an element the user is looking for
 def Find_All_Off_Type(x_choice):
     user_choise = str(x_choice)
@@ -41,11 +72,9 @@ def Find_All_Off_Type(x_choice):
 
     print(Base_url)
     # Searching for alternatives within API
-    # problemet är att den inte lägger till min parameter efter url:en
     r = requests.get(Base_url)
     data = r.json()
     print("The status code is: ", r.status_code)
-    # hitta något sätt att lära ut datan från din dict samt att den också ska gå efter user choice. Dvs väljer du "ada" så ska den skriva ut allt med ada inuti.
     state = 0
     Beer_Data = json.dumps(data) #json.dumps take a dictionary as input and returns a string as output.
     Beer_Data_Test = json.loads(Beer_Data) # json.loads take a string as input and returns a dictionary as output.
@@ -56,16 +85,33 @@ def Find_All_Off_Type(x_choice):
                 state = state + 1
                 if(state == 10):
                     break
-
             else:
+                print("\n\n")
                 print("Nothing here")
+                print("\n\n")
 
         else:
+            print("\n\n")
             print("Nothing here")
+            print("\n\n")
 
     else:
+        print("\n\n")
         print("Something went wrong!")
-
+        print("\n\n")
+    print("1: Next page")
+    print("2: Choice a beer")
+    print("3: Exit")
+    user_input = input()
+    if (user_input == "1"):
+        Secound_Ten(enter_a_beer_type)
+        return
+    elif (user_input == "2"):
+        print("Enter a beer: ")
+        choice_of_beer_user_wants = input()
+        choice_A_Beer(x_choice, choice_of_beer_user_wants)
+    else:
+        return
 
 def Secound_Ten(x_choice):
     user_choise = str(x_choice)
@@ -73,11 +119,9 @@ def Secound_Ten(x_choice):
 
     print(Base_url)
     # Searching for alternatives within API
-    # problemet är att den inte lägger till min parameter efter url:en
     r = requests.get(Base_url)
     data = r.json()
     print("The status code is: ", r.status_code)
-    # hitta något sätt att lära ut datan från din dict samt att den också ska gå efter user choice. Dvs väljer du "ada" så ska den skriva ut allt med ada inuti.
     state = 0
     Beer_Data = json.dumps(data)  # json.dumps take a dictionary as input and returns a string as output.
     Beer_Data_Test = json.loads(Beer_Data)  # json.loads take a string as input and returns a dictionary as output.
@@ -91,14 +135,31 @@ def Secound_Ten(x_choice):
 
 
             else:
+                print("\n\n")
                 print("Nothing here")
+                print("\n\n")
 
         else:
+            print("\n\n")
             print("Nothing here")
+            print("\n\n")
 
     else:
+        print("\n\n")
         print("Something went wrong!")
-
+        print("\n\n")
+    print("2: Choice a beer")
+    print("3: Exit")
+    user_input = input()
+    if (user_input == "1"):
+        Secound_Ten(enter_a_beer_type)
+        return
+    elif (user_input == "2"):
+        print("Enter a beer: ")
+        choice_of_beer_user_wants = input()
+        choice_A_Beer(x_choice, choice_of_beer_user_wants)
+    else:
+        return
 
 
 play = True
@@ -116,21 +177,16 @@ while(play == True):
         enter_a_beer_type = input("enter a type of beer: ")
         Find_All_Off_Type(enter_a_beer_type)
         print("\n")
-        print("1: Next Page")
-        print("2: Search again for a beer type: ")
-        print("3: Check a beer")
-        print("4: Exit")
+        print("1: Search again for a beer type: ")
+        print("2: Check a beer")
+        print("3: Exit")
 
         choice = input()
-        if(choice == "1"):
-            # if next page
-            Secound_Ten(enter_a_beer_type)
-            continue
-        elif (choice == "2"):
+        if (choice == "1"):
             enter_a_beer_type = input("enter a type of beer: ")
             Find_All_Off_Type(enter_a_beer_type)
             continue
-        elif(choice == "3"):
+        elif(choice == "2"):
             name()
             to_find = input("Enter the name of the beer: ")
             User_choice(to_find)
